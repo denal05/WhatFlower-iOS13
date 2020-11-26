@@ -8,9 +8,12 @@
 import UIKit
 import CoreML
 import Vision
+import Alamofire
+import SwiftyJSON
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    let wikipediaURl = "https://en.wikipedia.org/w/api.php"
     let imagePicker = UIImagePickerController()
     
     @IBOutlet weak var imageView: UIImageView!
@@ -39,8 +42,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         
         let request = VNCoreMLRequest(model: fcModel) { (vnRequest, error) in
-            let classification = vnRequest.results?.first as? VNClassificationObservation
-            self.navigationItem.title = classification?.identifier.capitalized
+            guard let classification = vnRequest.results?.first as? VNClassificationObservation else {
+                fatalError(#function + ": Could not classify image.")
+            }
+            self.navigationItem.title = classification.identifier.capitalized
+            self.requestInfoFromWikipedia(flowerName: classification.identifier)
         }
         
         let handler = VNImageRequestHandler(ciImage: image)
@@ -53,6 +59,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBAction func cameraTapped(_ sender: UIBarButtonItem) {
         present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func requestInfoFromWikipedia(flowerName: String) {
+        let wikiParameters : [String:String] = [
+          "format" : "json",
+          "action" : "query",
+          "prop" : "extracts",
+          "exintro" : "",
+          "explaintext" : "",
+          "titles" : flowerName,
+          "indexpageids" : "",
+          "redirects" : "1",
+        ]
+        
+        Alamofire.request(wikipediaURl, method: .get, parameters: wikiParameters).responseJSON { (response) in
+            if response.result.isSuccess {
+                print(#function + ": \(response)")
+            }
+        }
     }
     
 }
