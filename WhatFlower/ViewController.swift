@@ -10,9 +10,10 @@ import CoreML
 import Vision
 import Alamofire
 import SwiftyJSON
+import SDWebImage
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-
+    
     let wikipediaURl = "https://en.wikipedia.org/w/api.php"
     let imagePicker = UIImagePickerController()
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -25,13 +26,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imagePicker.allowsEditing = true
         imagePicker.sourceType = .camera
     }
-
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let userPickedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
             guard let ciImage = CIImage(image: userPickedImage) else {
                 fatalError(#function + ": Cannot convert UI image to CI image from UIImagePickerController for further processing")
             }
-            imageView.image = userPickedImage
+            
+            // Using imageView.sd_setImage(with: URL) inside requestInfoFromWikipedia(flowerName:) instead of
+            //imageView.image = userPickedImage
+            
             imagePicker.dismiss(animated: true, completion: nil)
             detect(image: ciImage)
         }
@@ -64,14 +68,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func requestInfoFromWikipedia(flowerName: String) {
         let wikiParameters : [String:String] = [
-          "format" : "json",
-          "action" : "query",
-          "prop" : "extracts",
-          "exintro" : "",
-          "explaintext" : "",
-          "titles" : flowerName,
-          "indexpageids" : "",
-          "redirects" : "1",
+            "format":       "json",
+            "action":       "query",
+            "prop":         "extracts|pageimages",
+            "exintro":      "",
+            "explaintext":  "",
+            "titles":       flowerName,
+            "indexpageids": "",
+            "redirects":    "1",
+            "pithumbsize":  "500"
         ]
         
         Alamofire.request(wikipediaURl, method: .get, parameters: wikiParameters).responseJSON { (response) in
@@ -81,6 +86,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 let pageID = flowerJSON["query"]["pageids"][0].stringValue
                 let flowerDescription = flowerJSON["query"]["pages"][pageID]["extract"].stringValue
                 self.descriptionLabel.text = flowerDescription
+                let flowerImageURL = flowerJSON["query"]["pages"][pageID]["thumbnail"]["source"].stringValue
+                self.imageView.sd_setImage(with: URL(string: flowerImageURL))
             }
         }
     }
