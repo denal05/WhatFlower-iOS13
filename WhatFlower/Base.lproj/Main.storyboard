@@ -18,15 +18,27 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0o3-49-BuM">
-                                <rect key="frame" x="0.0" y="44" width="320" height="524"/>
+                                <rect key="frame" x="0.0" y="44" width="320" height="320"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="0o3-49-BuM" secondAttribute="height" multiplier="1:1" id="I5j-at-DPg"/>
+                                </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="2m8-bp-GdF">
+                                <rect key="frame" x="20" y="384" width="280" height="164"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="2m8-bp-GdF" firstAttribute="top" secondItem="0o3-49-BuM" secondAttribute="bottom" constant="20" id="0eK-Rc-TsG"/>
                             <constraint firstItem="0o3-49-BuM" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="6Cx-4g-cMh"/>
                             <constraint firstItem="0o3-49-BuM" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="9Ub-Ht-3VE"/>
-                            <constraint firstItem="0o3-49-BuM" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="Cqa-6z-7Yf"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="2m8-bp-GdF" secondAttribute="bottom" constant="20" id="Mwu-gW-oHp"/>
+                            <constraint firstItem="2m8-bp-GdF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="k13-TD-lSo"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="2m8-bp-GdF" secondAttribute="trailing" constant="20" id="t8Q-Vb-Rfb"/>
                             <constraint firstItem="0o3-49-BuM" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="wg4-Zx-fpU"/>
                         </constraints>
                     </view>
@@ -38,12 +50,13 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="descriptionLabel" destination="2m8-bp-GdF" id="hX3-qf-15X"/>
                         <outlet property="imageView" destination="0o3-49-BuM" id="8eg-jl-Efy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="886.95652173913049" y="65.625"/>
+            <point key="canvasLocation" x="886.875" y="65.492957746478879"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="JPp-wj-mWa">
